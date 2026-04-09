@@ -1,0 +1,53 @@
+{
+    "name": "fr3on/laravel-atlas",
+    "description": "A browsable, searchable map of your entire Laravel application — routes, jobs, events, commands, and schedules in one place.",
+    "keywords": [
+        "laravel",
+        "documentation",
+        "routes",
+        "commands",
+        "events",
+        "atlas"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "fr3on"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/console": "^10.0|^11.0|^12.0|^13.0"
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.34|^3.0",
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^8.0|^9.0|^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fr3on\\Atlas\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fr3on\\Atlas\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fr3on\\Atlas\\AtlasServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

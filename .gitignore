@@ -1,0 +1,16 @@
+/vendor/
+/.idea/
+/.vscode/
+.DS_Store
+.phpunit.result.cache
+php-cs-fixer.cache
+.env
+.idea
+.vscode
+vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
+.phpunit.result.cache
+.php-cs-fixer.cache
+.php_cs.cache
