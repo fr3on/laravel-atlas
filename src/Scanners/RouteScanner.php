@@ -2,11 +2,11 @@
 
 namespace Fr3on\Atlas\Scanners;
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Collection;
-use ReflectionMethod;
-use ReflectionClass;
 use Closure;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Route;
+use ReflectionClass;
+use ReflectionMethod;
 
 class RouteScanner
 {
@@ -45,7 +45,7 @@ class RouteScanner
 
         try {
             if (is_string($action) && str_contains($action, '@')) {
-                list($class, $method) = explode('@', $action);
+                [$class, $method] = explode('@', $action);
             } elseif (is_array($action)) {
                 $class = $action[0];
                 $method = $action[1];
@@ -76,7 +76,7 @@ class RouteScanner
     private function isVendor($route): bool
     {
         $action = $route->getAction('controller');
-        
+
         if (! $action) {
             return false;
         }

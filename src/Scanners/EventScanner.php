@@ -2,10 +2,10 @@
 
 namespace Fr3on\Atlas\Scanners;
 
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Collection;
-use ReflectionClass;
 use Closure;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
+use ReflectionClass;
 
 class EventScanner
 {
@@ -15,7 +15,7 @@ class EventScanner
     public function scan(): Collection
     {
         $dispatcher = Event::getFacadeRoot();
-        
+
         $reflection = new ReflectionClass($dispatcher);
         $property = $reflection->getProperty('listeners');
         $property->setAccessible(true);
@@ -51,15 +51,16 @@ class EventScanner
 
         try {
             $ref = new ReflectionClass($class);
+
             return [
-                'name' => $class . '@' . $method,
+                'name' => $class.'@'.$method,
                 'class' => $class,
                 'method' => $method,
                 'file' => $ref->getFileName(),
                 'line' => $ref->hasMethod($method) ? $ref->getMethod($method)->getStartLine() : $ref->getStartLine(),
             ];
         } catch (\Exception $e) {
-            return ['name' => $class . '@' . $method, 'file' => null];
+            return ['name' => $class.'@'.$method, 'file' => null];
         }
     }
 }

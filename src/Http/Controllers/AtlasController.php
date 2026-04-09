@@ -2,19 +2,19 @@
 
 namespace Fr3on\Atlas\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
-use Fr3on\Atlas\Scanners\RouteScanner;
 use Fr3on\Atlas\Scanners\CommandScanner;
-use Fr3on\Atlas\Scanners\ScheduleScanner;
-use Fr3on\Atlas\Scanners\EventScanner;
-use Fr3on\Atlas\Scanners\ModelScanner;
-use Fr3on\Atlas\Scanners\MigrationScanner;
 use Fr3on\Atlas\Scanners\ConfigScanner;
+use Fr3on\Atlas\Scanners\EventScanner;
+use Fr3on\Atlas\Scanners\MigrationScanner;
+use Fr3on\Atlas\Scanners\ModelScanner;
 use Fr3on\Atlas\Scanners\PolicyScanner;
+use Fr3on\Atlas\Scanners\RouteScanner;
+use Fr3on\Atlas\Scanners\ScheduleScanner;
 use Fr3on\Atlas\Traits\GeneratesMarkdown;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Collection;
 
 class AtlasController extends Controller
 {
@@ -65,16 +65,16 @@ class AtlasController extends Controller
     public function export(Request $request)
     {
         $format = $request->get('format', 'json');
-        
+
         $data = collect([
-            'routes' => (new RouteScanner())->scan(),
-            'models' => (new ModelScanner())->scan(),
-            'commands' => (new CommandScanner())->scan(),
-            'migrations' => (new MigrationScanner())->scan(),
-            'events' => (new EventScanner())->scan(),
-            'schedule' => (new ScheduleScanner())->scan(),
-            'config' => (new ConfigScanner())->scan(),
-            'policies' => (new PolicyScanner())->scan(),
+            'routes' => (new RouteScanner)->scan(),
+            'models' => (new ModelScanner)->scan(),
+            'commands' => (new CommandScanner)->scan(),
+            'migrations' => (new MigrationScanner)->scan(),
+            'events' => (new EventScanner)->scan(),
+            'schedule' => (new ScheduleScanner)->scan(),
+            'config' => (new ConfigScanner)->scan(),
+            'policies' => (new PolicyScanner)->scan(),
         ]);
 
         if ($format === 'json') {
@@ -90,14 +90,14 @@ class AtlasController extends Controller
     protected function getPanelData($panel): Collection
     {
         return match ($panel) {
-            'routes' => (new RouteScanner())->scan(),
-            'models' => (new ModelScanner())->scan(),
-            'commands' => (new CommandScanner())->scan(),
-            'migrations' => (new MigrationScanner())->scan(),
-            'events' => (new EventScanner())->scan(),
-            'schedule' => (new ScheduleScanner())->scan(),
-            'config' => (new ConfigScanner())->scan(),
-            'policies' => (new PolicyScanner())->scan(),
+            'routes' => (new RouteScanner)->scan(),
+            'models' => (new ModelScanner)->scan(),
+            'commands' => (new CommandScanner)->scan(),
+            'migrations' => (new MigrationScanner)->scan(),
+            'events' => (new EventScanner)->scan(),
+            'schedule' => (new ScheduleScanner)->scan(),
+            'config' => (new ConfigScanner)->scan(),
+            'policies' => (new PolicyScanner)->scan(),
             default => collect(),
         };
     }
@@ -108,14 +108,14 @@ class AtlasController extends Controller
 
         return $data->filter(function ($item) use ($panel, $search) {
             $stringToSearch = match ($panel) {
-                'routes' => ($item['uri'] ?? '') . ' ' . ($item['name'] ?? '') . ' ' . ($item['action'] ?? ''),
-                'models' => ($item['name'] ?? '') . ' ' . ($item['table'] ?? ''),
-                'commands' => ($item['name'] ?? '') . ' ' . ($item['description'] ?? ''),
-                'migrations' => ($item['title'] ?? '') . ' ' . ($item['name'] ?? ''),
-                'schedule' => ($item['command'] ?? '') . ' ' . ($item['description'] ?? '') . ' ' . ($item['expression'] ?? ''),
-                'events' => ($item['event'] ?? '') . ' ' . implode(' ', collect($item['listeners'] ?? [])->pluck('name')->toArray()),
-                'config' => ($item['key'] ?? '') . ' ' . ($item['value'] ?? ''),
-                'policies' => ($item['model'] ?? '') . ' ' . ($item['class'] ?? ''),
+                'routes' => ($item['uri'] ?? '').' '.($item['name'] ?? '').' '.($item['action'] ?? ''),
+                'models' => ($item['name'] ?? '').' '.($item['table'] ?? ''),
+                'commands' => ($item['name'] ?? '').' '.($item['description'] ?? ''),
+                'migrations' => ($item['title'] ?? '').' '.($item['name'] ?? ''),
+                'schedule' => ($item['command'] ?? '').' '.($item['description'] ?? '').' '.($item['expression'] ?? ''),
+                'events' => ($item['event'] ?? '').' '.implode(' ', collect($item['listeners'] ?? [])->pluck('name')->toArray()),
+                'config' => ($item['key'] ?? '').' '.($item['value'] ?? ''),
+                'policies' => ($item['model'] ?? '').' '.($item['class'] ?? ''),
                 default => '',
             };
 
@@ -142,15 +142,15 @@ class AtlasController extends Controller
     {
         $stats = [];
         $res = ['routes', 'models', 'commands', 'migrations', 'events', 'schedule', 'config', 'policies'];
-        
-        foreach($res as $r) {
-            $stats[$r . '_count'] = $this->getPanelData($r)->count();
+
+        foreach ($res as $r) {
+            $stats[$r.'_count'] = $this->getPanelData($r)->count();
         }
 
         // Keep existing specifics
-        $routes = (new RouteScanner())->scan();
-        $stats['throttled_count'] = $routes->filter(fn($r) => collect($r['middleware'] ?? [])->contains(fn($m) => str_contains($m, 'throttle')))->count();
-        $stats['public_count'] = $routes->filter(fn($r) => ! collect($r['middleware'] ?? [])->contains(fn($m) => str_contains($m, 'auth') || str_contains($m, 'sanctum')))->count();
+        $routes = (new RouteScanner)->scan();
+        $stats['throttled_count'] = $routes->filter(fn ($r) => collect($r['middleware'] ?? [])->contains(fn ($m) => str_contains($m, 'throttle')))->count();
+        $stats['public_count'] = $routes->filter(fn ($r) => ! collect($r['middleware'] ?? [])->contains(fn ($m) => str_contains($m, 'auth') || str_contains($m, 'sanctum')))->count();
 
         return $stats;
     }

@@ -2,8 +2,8 @@
 
 namespace Fr3on\Atlas\Scanners;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -15,23 +15,23 @@ class ModelScanner
     public function scan(): Collection
     {
         $path = app_path('Models');
-        
+
         if (! File::exists($path)) {
             // Check app/ if app/Models doesn't exist (older Laravel)
             $path = app_path();
         }
 
         return collect(File::allFiles($path))
-            ->filter(fn($file) => $file->getExtension() === 'php')
+            ->filter(fn ($file) => $file->getExtension() === 'php')
             ->map(function ($file) {
                 $class = $this->getClassFromFile($file);
-                
+
                 if (! $class || ! class_exists($class)) {
                     return null;
                 }
 
                 $reflection = new ReflectionClass($class);
-                
+
                 if ($reflection->isAbstract() || ! $reflection->isSubclassOf('Illuminate\Database\Eloquent\Model')) {
                     return null;
                 }
@@ -56,8 +56,9 @@ class ModelScanner
     {
         $content = file_get_contents($file->getRealPath());
         if (preg_match('/namespace\s+(.+);/', $content, $matches)) {
-            return $matches[1] . '\\' . $file->getBasename('.php');
+            return $matches[1].'\\'.$file->getBasename('.php');
         }
+
         return null;
     }
 

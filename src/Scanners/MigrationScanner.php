@@ -2,9 +2,9 @@
 
 namespace Fr3on\Atlas\Scanners;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class MigrationScanner
 {
@@ -14,7 +14,7 @@ class MigrationScanner
     public function scan(): Collection
     {
         $path = database_path('migrations');
-        
+
         if (! File::exists($path)) {
             return collect();
         }
@@ -25,7 +25,7 @@ class MigrationScanner
             ->map(function ($file) use ($ranMigrations) {
                 $name = $file->getBasename('.php');
                 $parts = explode('_', $name, 5);
-                
+
                 return [
                     'name' => $name,
                     'date' => isset($parts[0]) ? "{$parts[0]}-{$parts[1]}-{$parts[2]}" : 'Unknown',
@@ -44,6 +44,7 @@ class MigrationScanner
             if (! DB::connection()->getPdo()) {
                 return [];
             }
+
             return DB::table('migrations')->pluck('migration')->toArray();
         } catch (\Exception $e) {
             return [];

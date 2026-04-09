@@ -12,24 +12,27 @@ trait GeneratesMarkdown
     protected function generateMarkdown(Collection $data): string
     {
         $md = "# Laravel Atlas Export\n\n";
-        $md .= "Generated on: " . now()->toDateTimeString() . "\n\n";
+        $md .= 'Generated on: '.now()->toDateTimeString()."\n\n";
 
         // If the collection doesn't have named panels, wrap it.
-        $panels = isset($data['routes']) || isset($data['commands']) 
-            ? $data 
+        $panels = isset($data['routes']) || isset($data['commands'])
+            ? $data
             : collect(['items' => $data]);
 
         foreach ($panels as $panelName => $items) {
             if ($panelName !== 'items') {
-                $md .= "## " . ucfirst($panelName) . "\n\n";
+                $md .= '## '.ucfirst($panelName)."\n\n";
             }
-            
+
             // Logic to determine type if not named
             $type = $panelName;
             if ($panelName === 'items' && $items->isNotEmpty()) {
                 $first = $items->first();
-                if (isset($first['uri'])) $type = 'routes';
-                elseif (isset($first['signature']) || isset($first['name'])) $type = 'commands';
+                if (isset($first['uri'])) {
+                    $type = 'routes';
+                } elseif (isset($first['signature']) || isset($first['name'])) {
+                    $type = 'commands';
+                }
             }
 
             if ($type === 'routes') {
@@ -42,7 +45,7 @@ trait GeneratesMarkdown
                 $md .= "| Model | Table | Relations |\n";
                 $md .= "| :--- | :--- | :--- |\n";
                 foreach ($items as $item) {
-                    $rels = collect($item['relations'])->map(fn($r) => "{$r['name']}({$r['type']})")->implode(', ');
+                    $rels = collect($item['relations'])->map(fn ($r) => "{$r['name']}({$r['type']})")->implode(', ');
                     $md .= "| `{$item['name']}` | `{$item['table']}` | {$rels} |\n";
                 }
             } elseif ($type === 'commands') {
@@ -84,7 +87,7 @@ trait GeneratesMarkdown
                     $md .= "| **{$item['model']}** | `{$item['class']}` | {$methods} |\n";
                 }
             }
-            
+
             $md .= "\n";
         }
 

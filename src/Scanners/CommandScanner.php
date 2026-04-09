@@ -2,8 +2,8 @@
 
 namespace Fr3on\Atlas\Scanners;
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use ReflectionClass;
 
 class CommandScanner
@@ -22,6 +22,7 @@ class CommandScanner
                 }
 
                 $class = get_class($command);
+
                 return str_starts_with($class, 'Illuminate\\') || str_starts_with($class, 'Symfony\\');
             })
             ->map(function ($command) {
@@ -34,13 +35,13 @@ class CommandScanner
                     'class' => get_class($command),
                     'file' => $reflection->getFileName(),
                     'line' => $reflection->getStartLine(),
-                    'arguments' => collect($definition->getArguments())->map(fn($a) => [
+                    'arguments' => collect($definition->getArguments())->map(fn ($a) => [
                         'name' => $a->getName(),
                         'description' => $a->getDescription(),
                         'default' => $a->getDefault(),
                         'required' => $a->isRequired(),
                     ])->values()->toArray(),
-                    'options' => collect($definition->getOptions())->map(fn($o) => [
+                    'options' => collect($definition->getOptions())->map(fn ($o) => [
                         'name' => $o->getName(),
                         'description' => $o->getDescription(),
                         'default' => $o->getDefault(),

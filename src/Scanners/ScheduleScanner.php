@@ -4,7 +4,6 @@ namespace Fr3on\Atlas\Scanners;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Collection;
-use ReflectionClass;
 
 class ScheduleScanner
 {

@@ -2,9 +2,9 @@
 
 namespace Fr3on\Atlas\Scanners;
 
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 use ReflectionClass;
 
 class PolicyScanner
@@ -50,8 +50,9 @@ class PolicyScanner
     {
         try {
             $ref = new ReflectionClass($class);
+
             return collect($ref->getMethods(\ReflectionMethod::IS_PUBLIC))
-                ->filter(fn($m) => ! $m->isConstructor())
+                ->filter(fn ($m) => ! $m->isConstructor())
                 ->pluck('name')
                 ->toArray();
         } catch (\Exception $e) {
@@ -63,8 +64,9 @@ class PolicyScanner
     {
         $content = file_get_contents($file->getRealPath());
         if (preg_match('/namespace\s+(.+);/', $content, $matches)) {
-            return $matches[1] . '\\' . $file->getBasename('.php');
+            return $matches[1].'\\'.$file->getBasename('.php');
         }
+
         return null;
     }
 }

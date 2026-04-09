@@ -6,14 +6,14 @@ use Fr3on\Atlas\Scanners\CommandScanner;
 use Fr3on\Atlas\Scanners\EventScanner;
 use Fr3on\Atlas\Scanners\RouteScanner;
 use Fr3on\Atlas\Scanners\ScheduleScanner;
+use Fr3on\Atlas\Traits\GeneratesMarkdown;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-
-use Fr3on\Atlas\Traits\GeneratesMarkdown;
 
 class AtlasExportCommand extends Command
 {
     use GeneratesMarkdown;
+
     /**
      * The name and signature of the console command.
      *
@@ -42,7 +42,7 @@ class AtlasExportCommand extends Command
 
         $data = $this->gatherData($panel);
 
-        $content = $format === 'json' 
+        $content = $format === 'json'
             ? $data->toJson(JSON_PRETTY_PRINT)
             : $this->generateMarkdown($data);
 
@@ -60,18 +60,18 @@ class AtlasExportCommand extends Command
     {
         if ($panel === 'all') {
             return collect([
-                'routes' => (new RouteScanner())->scan(),
-                'commands' => (new CommandScanner())->scan(),
-                'schedule' => (new ScheduleScanner())->scan(),
-                'events' => (new EventScanner())->scan(),
+                'routes' => (new RouteScanner)->scan(),
+                'commands' => (new CommandScanner)->scan(),
+                'schedule' => (new ScheduleScanner)->scan(),
+                'events' => (new EventScanner)->scan(),
             ]);
         }
 
         return match ($panel) {
-            'routes' => (new RouteScanner())->scan(),
-            'commands' => (new CommandScanner())->scan(),
-            'schedule' => (new ScheduleScanner())->scan(),
-            'events' => (new EventScanner())->scan(),
+            'routes' => (new RouteScanner)->scan(),
+            'commands' => (new CommandScanner)->scan(),
+            'schedule' => (new ScheduleScanner)->scan(),
+            'events' => (new EventScanner)->scan(),
             default => collect([]),
         };
     }

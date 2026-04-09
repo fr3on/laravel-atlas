@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 class ConfigScanner
 {
     protected array $blacklist = [
-        'key', 'secret', 'password', 'token', 'crypt', 'salt', 'private', 'auth', 'database', 'dsn'
+        'key', 'secret', 'password', 'token', 'crypt', 'salt', 'private', 'auth', 'database', 'dsn',
     ];
 
     /**
@@ -33,9 +33,9 @@ class ConfigScanner
 
         foreach ($array as $key => $value) {
             if (is_array($value) && ! empty($value) && ! array_is_list($value)) {
-                $result = array_merge($result, $this->flatten($value, $prefix . $key . '.'));
+                $result = array_merge($result, $this->flatten($value, $prefix.$key.'.'));
             } else {
-                $result[$prefix . $key] = $value;
+                $result[$prefix.$key] = $value;
             }
         }
 
@@ -44,8 +44,12 @@ class ConfigScanner
 
     protected function sanitize(string $key, $value)
     {
-        if (is_null($value)) return 'null';
-        if (is_bool($value)) return $value ? 'true' : 'false';
+        if (is_null($value)) {
+            return 'null';
+        }
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
 
         foreach ($this->blacklist as $term) {
             if (str_contains(strtolower($key), $term)) {
