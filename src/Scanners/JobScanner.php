@@ -15,7 +15,7 @@ class JobScanner
     public function scan(): Collection
     {
         $appPath = app_path();
-        if (!is_dir($appPath)) {
+        if (! is_dir($appPath)) {
             return collect();
         }
 
@@ -24,14 +24,14 @@ class JobScanner
 
         foreach ($files as $file) {
             $content = file_get_contents($file->getRealPath());
-            
+
             // Quick check for ShouldQueue before doing expensive Reflection
-            if (!str_contains($content, 'ShouldQueue')) {
+            if (! str_contains($content, 'ShouldQueue')) {
                 continue;
             }
 
             $className = $this->extractClassName($file->getRealPath());
-            if (!$className || !class_exists($className)) {
+            if (! $className || ! class_exists($className)) {
                 continue;
             }
 
@@ -60,9 +60,10 @@ class JobScanner
         if ($reflection->hasProperty($name)) {
             $prop = $reflection->getProperty($name);
             $prop->setAccessible(true);
-            
+
             // Try to get default value from property
             $defaults = $reflection->getDefaultProperties();
+
             return $defaults[$name] ?? null;
         }
 
@@ -76,7 +77,7 @@ class JobScanner
     {
         $path = str_replace(app_path(), 'App', $path);
         $path = str_replace('.php', '', $path);
-        
+
         return str_replace('/', '\\', $path);
     }
 }
