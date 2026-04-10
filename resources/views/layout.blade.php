@@ -210,42 +210,8 @@
             </div>
 
             <div class="content">
-                @foreach($data as $item)
-                    <div class="list-row atlas-row" onclick="inspect({{ json_encode($item) }}, '{{ $panel }}')">
-                        @if($panel === 'routes')
-                            <span class="badge method-{{ strtolower(explode('|', $item['method'])[0]) }}">{{ explode('|', $item['method'])[0] }}</span>
-                            <span class="path">{{ $item['uri'] }}</span>
-                            @foreach(array_slice($item['middleware'], 0, 2) as $mw)
-                                <span class="tag {{ str_contains($mw, 'throttle') ? 'tag-accent' : '' }}">{{ $mw }}</span>
-                            @endforeach
-                            <span class="meta-text">{{ class_basename(explode('@', $item['action'])[0]) }}@ {{ explode('@', $item['action'])[1] ?? '' }}</span>
-                        @elseif($panel === 'models')
-                            <span class="badge method-get">MODEL</span>
-                            <span class="path">{{ $item['name'] }}</span>
-                            <span class="meta-text" style="margin-left:auto">{{ count($item['relations']) }} relations</span>
-                        @elseif($panel === 'commands')
-                            <span class="path">{{ $item['name'] }}</span>
-                            <span class="meta-text">{{ $item['description'] }}</span>
-                        @elseif($panel === 'migrations')
-                            <span class="badge status-{{ $item['status'] }}">{{ strtoupper($item['status']) }}</span>
-                            <span class="path">{{ $item['title'] }}</span>
-                            <span class="meta-text">{{ $item['date'] }}</span>
-                        @elseif($panel === 'events')
-                            <span class="path">{{ class_basename($item['event']) }}</span>
-                            <span class="meta-text">{{ count($item['listeners']) }} listeners</span>
-                        @elseif($panel === 'schedule')
-                            <span class="badge method-put">{{ $item['expression'] }}</span>
-                            <span class="path">{{ $item['command'] }}</span>
-                        @elseif($panel === 'config')
-                            <span class="path" style="opacity:0.6">{{ $item['key'] }}</span>
-                            <span class="path" style="color:var(--accent); text-align:right">{{ $item['value'] }}</span>
-                        @elseif($panel === 'policies')
-                            <span class="badge method-post">POLICY</span>
-                            <span class="path">{{ $item['model'] }}</span>
-                            <span class="meta-text">{{ class_basename($item['class']) }}</span>
-                        @endif
-                    </div>
-                @endforeach
+                @includeFirst(["atlas::panels.{$panel}", "atlas::panels.default"])
+            </div>
 
                 @if($data->hasPages())
                     <div style="display:flex; justify-content:center; gap:8px; margin-top:24px;">

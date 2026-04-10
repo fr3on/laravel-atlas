@@ -5,6 +5,7 @@ namespace Fr3on\Atlas\Http\Controllers;
 use Fr3on\Atlas\Scanners\CommandScanner;
 use Fr3on\Atlas\Scanners\ConfigScanner;
 use Fr3on\Atlas\Scanners\EventScanner;
+use Fr3on\Atlas\Scanners\JobScanner;
 use Fr3on\Atlas\Scanners\MigrationScanner;
 use Fr3on\Atlas\Scanners\ModelScanner;
 use Fr3on\Atlas\Scanners\PolicyScanner;
@@ -33,6 +34,7 @@ class AtlasController extends Controller
             'commands' => true,
             'migrations' => true,
             'events' => true,
+            'jobs' => true,
             'schedule' => true,
             'config' => true,
             'policies' => true,
@@ -72,6 +74,7 @@ class AtlasController extends Controller
             'commands' => (new CommandScanner)->scan(),
             'migrations' => (new MigrationScanner)->scan(),
             'events' => (new EventScanner)->scan(),
+            'jobs' => (new JobScanner)->scan(),
             'schedule' => (new ScheduleScanner)->scan(),
             'config' => (new ConfigScanner)->scan(),
             'policies' => (new PolicyScanner)->scan(),
@@ -95,6 +98,7 @@ class AtlasController extends Controller
             'commands' => (new CommandScanner)->scan(),
             'migrations' => (new MigrationScanner)->scan(),
             'events' => (new EventScanner)->scan(),
+            'jobs' => (new JobScanner)->scan(),
             'schedule' => (new ScheduleScanner)->scan(),
             'config' => (new ConfigScanner)->scan(),
             'policies' => (new PolicyScanner)->scan(),
@@ -114,6 +118,7 @@ class AtlasController extends Controller
                 'migrations' => ($item['title'] ?? '').' '.($item['name'] ?? ''),
                 'schedule' => ($item['command'] ?? '').' '.($item['description'] ?? '').' '.($item['expression'] ?? ''),
                 'events' => ($item['event'] ?? '').' '.implode(' ', collect($item['listeners'] ?? [])->pluck('name')->toArray()),
+                'jobs' => ($item['name'] ?? '').' '.($item['class'] ?? '').' '.($item['queue'] ?? ''),
                 'config' => ($item['key'] ?? '').' '.($item['value'] ?? ''),
                 'policies' => ($item['model'] ?? '').' '.($item['class'] ?? ''),
                 default => '',
@@ -141,7 +146,7 @@ class AtlasController extends Controller
     protected function getStats(): array
     {
         $stats = [];
-        $res = ['routes', 'models', 'commands', 'migrations', 'events', 'schedule', 'config', 'policies'];
+        $res = ['routes', 'models', 'commands', 'migrations', 'events', 'jobs', 'schedule', 'config', 'policies'];
 
         foreach ($res as $r) {
             $stats[$r.'_count'] = $this->getPanelData($r)->count();

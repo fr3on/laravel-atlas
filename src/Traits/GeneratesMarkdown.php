@@ -67,6 +67,12 @@ trait GeneratesMarkdown
                     $listeners = collect($item['listeners'] ?? [])->pluck('name')->implode('<br>');
                     $md .= "| `{$item['event']}` | {$listeners} |\n";
                 }
+            } elseif ($type === 'jobs') {
+                $md .= "| Job | Queue | Connection |\n";
+                $md .= "| :--- | :--- | :--- |\n";
+                foreach ($items as $item) {
+                    $md .= "| `{$item['name']}` | `{$item['queue']}` | `{$item['connection']}` |\n";
+                }
             } elseif ($type === 'schedule') {
                 $md .= "| Internal | Expression | Description |\n";
                 $md .= "| :--- | :--- | :--- |\n";
