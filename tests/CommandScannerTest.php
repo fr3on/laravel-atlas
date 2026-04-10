@@ -1,12 +1,13 @@
 <?php
 
 use Fr3on\Atlas\Scanners\CommandScanner;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\Kernel;
 
 class TestCommand extends Command
 {
     protected $signature = 'atlas:test {arg : description} {--opt=default : opt-description}';
+
     protected $description = 'A test command';
 
     public function handle()
@@ -17,7 +18,7 @@ class TestCommand extends Command
 
 test('it can scan commands', function () {
     // Register the command directly in the application
-    app()->make(\Illuminate\Contracts\Console\Kernel::class)->registerCommand(new TestCommand);
+    app()->make(Kernel::class)->registerCommand(new TestCommand);
 
     $scanner = new CommandScanner;
     $commands = $scanner->scan();

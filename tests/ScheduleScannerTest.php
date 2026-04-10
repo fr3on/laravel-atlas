@@ -10,7 +10,7 @@ test('it can scan scheduled tasks', function () {
     $scanner = new ScheduleScanner;
     $tasks = $scanner->scan();
 
-    $inspire = $tasks->first(fn($t) => str_contains($t['command'], 'inspire'));
+    $inspire = $tasks->first(fn ($t) => str_contains($t['command'], 'inspire'));
 
     expect($inspire)->not->toBeNull();
     expect($inspire['expression'])->toBe('0 * * * *');

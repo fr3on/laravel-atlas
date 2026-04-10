@@ -4,7 +4,8 @@ use Fr3on\Atlas\Scanners\EventScanner;
 use Illuminate\Support\Facades\Event;
 
 class TestEvent {}
-class TestListener {
+class TestListener
+{
     public function handle(TestEvent $event) {}
 }
 

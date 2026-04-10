@@ -5,12 +5,12 @@ use Illuminate\Support\Facades\File;
 
 test('it can scan migrations', function () {
     $migrationsPath = database_path('migrations');
-    if (!File::exists($migrationsPath)) {
+    if (! File::exists($migrationsPath)) {
         File::makeDirectory($migrationsPath, 0755, true);
     }
 
     $migrationName = '2026_01_01_000000_create_test_table';
-    File::put($migrationsPath . '/' . $migrationName . '.php', '<?php');
+    File::put($migrationsPath.'/'.$migrationName.'.php', '<?php');
 
     $scanner = new MigrationScanner;
     $migrations = $scanner->scan();
@@ -23,5 +23,5 @@ test('it can scan migrations', function () {
     expect($migration['status'])->toBe('pending'); // Since DB table doesn't exist
 
     // Cleanup
-    File::delete($migrationsPath . '/' . $migrationName . '.php');
+    File::delete($migrationsPath.'/'.$migrationName.'.php');
 });

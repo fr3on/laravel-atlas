@@ -4,8 +4,10 @@ use Fr3on\Atlas\Scanners\PolicyScanner;
 use Illuminate\Support\Facades\Gate;
 
 class TestModel {}
-class TestPolicy {
+class TestPolicy
+{
     public function viewAny() {}
+
     public function view() {}
 }
 
